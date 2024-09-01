@@ -1,0 +1,22 @@
+{
+    "servidor": {
+        "nome": "String",
+        "setor": "String",
+        "funcao": "String",
+        "ramal": "String",
+        "veiculos": [
+            {
+                "placa": "String",
+                "modelo": "String",
+                "cor": "String",
+                "foto": "String",
+                "temporario":"boolena",
+                "data_limite":"Date",
+                "acessos":{
+                    "entrada": "Date",
+                    "saida":"Date",
+                }
+            }
+        ]
+    }
+}
