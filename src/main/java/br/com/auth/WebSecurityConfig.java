@@ -38,11 +38,14 @@ public class WebSecurityConfig {
         SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http.csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(
-                                                auth -> auth.requestMatchers("/login").permitAll()
-                                                                .requestMatchers("/primeiroacesso").permitAll()
-                                                                .requestMatchers("/usuario/**")
-                                                                .hasAuthority("SCOPE_ADMIN")
-                                                                .anyRequest().authenticated()
+                                                /*
+                                                 * auth -> auth.requestMatchers("/login").permitAll()
+                                                 * .requestMatchers("/primeiroacesso").permitAll()
+                                                 * .requestMatchers("/usuario/**")
+                                                 * .hasAuthority("SCOPE_ADMIN")
+                                                 * .anyRequest().authenticated()
+                                                 */
+                                                auth -> auth.anyRequest().permitAll()
 
                                 )
                                 .oauth2ResourceServer(

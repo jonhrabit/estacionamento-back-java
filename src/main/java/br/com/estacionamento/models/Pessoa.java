@@ -21,10 +21,7 @@ public class Pessoa {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String nome;
-    private String setor;
-    private String funcao;
-    private String ramal;
+    private String nome, numFunc, tipoVinculo, cargo, fgOuCc, lotacao, ramal, email;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Veiculo> veiculos;
