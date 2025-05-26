@@ -29,7 +29,7 @@ public class JwtService {
             .joining(" "));
 
     JwtClaimsSet claims = JwtClaimsSet.builder()
-        .issuer("gestor-jwt-1.0")
+        .issuer("xavier-jwt-1.0")
         .issuedAt(now)
         .expiresAt(now.plusSeconds(expiry))
         .subject(usuario.getUsername())

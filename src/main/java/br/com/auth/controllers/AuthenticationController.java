@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.auth.DTO.LoginDTO;
+import br.com.auth.DTO.LoginResponseDTO;
 import br.com.auth.model.Permissao;
 import br.com.auth.model.Usuario;
 import br.com.auth.repositories.PermissaoRepository;
@@ -44,7 +45,7 @@ public class AuthenticationController {
             return new ResponseEntity<>("Senha incorreta.", HttpStatus.UNAUTHORIZED);
 
         }
-        return new ResponseEntity<>(authenticationService.authenticate(user.get()), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponseDTO(authenticationService.authenticate(user.get())), HttpStatus.OK);
     }
 
  @RequestMapping("/primeiroacesso")
