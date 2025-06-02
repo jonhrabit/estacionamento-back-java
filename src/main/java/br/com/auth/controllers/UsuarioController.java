@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.auth.exceptions.ItemNotFoundExcepion;
+import br.com.auth.model.PermissoesTipo;
 import br.com.auth.model.Usuario;
 import br.com.auth.services.UsuarioService;
 
@@ -28,23 +29,39 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario post(@RequestBody Usuario usuario) {
-        return usuarioService.save(usuario);
+    public Usuario post(@RequestBody Usuario usuario) throws Exception {
+        return usuarioService.create(usuario);
     }
 
     @GetMapping("/{id}")
     public Usuario get(@PathVariable Long id) throws ItemNotFoundExcepion {
         return usuarioService.get(id);
     }
+    @GetMapping("/permissoes")
+    public List<PermissoesTipo> permissoes(){
+        return usuarioService.allPermissoesTipos();
+    }
 
     @PutMapping("/{id}")
     Usuario put(@RequestBody Usuario novo, @PathVariable Long id) {
-        return usuarioService.update(novo, id);
+        System.out.println("Updating user: " + novo);
+        return usuarioService.update(id, novo);
+    }
+
+    @PutMapping("/alterarsenha/{id}")
+    boolean alterarSenha(@PathVariable Long id,@RequestBody String password) throws ItemNotFoundExcepion {
+        usuarioService.setPassword(id, password);
+        return true;
+    }
+    @PutMapping("/resetsenha/{id}")
+    boolean alterarSenha(@PathVariable Long id) throws ItemNotFoundExcepion {
+        usuarioService.resetPassword(id);
+        return true;
     }
 
     @DeleteMapping("/{id}")
     public boolean delete(@PathVariable Long id) {
-        usuarioService.delete(id);
+        usuarioService.deleteById(id);
         return true;
     }
 }

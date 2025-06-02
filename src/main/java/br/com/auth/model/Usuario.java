@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,10 +46,12 @@ public class Usuario implements UserDetails {
     private String nome, username, password, email, cpf;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "permissao_id"))
     private List<Permissao> permissoes;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.permissoes;
     }
@@ -85,6 +88,18 @@ public class Usuario implements UserDetails {
     public Boolean matches(String senha) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(senha, this.password);
+    }
+
+    public Usuario fromDTO(Usuario usuario) {
+        this.setId(usuario.getId());
+        this.setNome(usuario.getNome());
+        this.setUsername(usuario.getUsername());
+        this.setPassword(encode(usuario.getPassword()));
+        this.setEmail(usuario.getEmail());
+        this.setCpf(usuario.getCpf());
+        this.setCadastro(new Date());
+        this.setPermissoes(usuario.getPermissoes());
+        return this;
     }
 
     /* public void obterIdPermissoes(PermissaoService service) {

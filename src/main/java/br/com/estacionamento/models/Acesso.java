@@ -31,4 +31,6 @@ public class Acesso {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @Temporal(TemporalType.TIMESTAMP)
     private Date saida;
+
+    private String observacao;
 }

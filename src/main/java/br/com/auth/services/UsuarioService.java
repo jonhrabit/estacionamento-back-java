@@ -1,45 +1,92 @@
 package br.com.auth.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.auth.exceptions.ItemNotFoundExcepion;
+import br.com.auth.model.PermissoesTipo;
 import br.com.auth.model.Usuario;
+import br.com.auth.repositories.PermissaoRepository;
 import br.com.auth.repositories.UsuarioRepository;
 
 @Service
 public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    PermissaoRepository permissaoRepository;
 
-    public Usuario get(Long id) throws ItemNotFoundExcepion {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return usuario.orElseThrow(() -> new ItemNotFoundExcepion(id, Usuario.class.getSimpleName()));
+    public boolean usuarioExist(Usuario usuario) {
+        List<Usuario> lista = this.all();
+        if (lista.stream().filter(u -> u.getUsername().equals(usuario.getUsername()) ||
+                u.getEmail().equals(usuario.getEmail()) ||
+                u.getNome().equals(usuario.getNome())).count() > 0) {
+            return true;
+        }
+        return false;
     }
 
-    public List<Usuario> all() {
-        return usuarioRepository.findAll();
-    }
-
-    public Usuario update(Usuario usuario, Long id) throws ItemNotFoundExcepion {
-        Usuario usuarioOld = this.get(id);
-        usuarioOld = usuario;
-        return usuarioRepository.save(usuarioOld);
-    }
-
-    public Usuario save(Usuario usuario) {
+    public Usuario create(Usuario usuario) throws Exception {
+        if (this.usuarioExist(usuario)) {
+            throw new Exception("Já Existe um usuário com nome, username ou email cadastrado.");
+        }
+        usuario.setPassword(Usuario.encode(usuario.getUsername()));
         return usuarioRepository.save(usuario);
     }
 
-    public void delete(Usuario usuario) {
+    public List<Usuario> all() {
+        return usuarioRepository.findAll().stream().map(usuario -> {
+            usuario.setPassword("");
+            return usuario;
+        }).toList();
+    }
+
+    public Usuario get(Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundExcepion(id, Usuario.class.getSimpleName()));
+        usuario.setPassword("");
+        return usuario;
+    }
+
+    public Usuario update(Long id, Usuario usuarioDetails) throws ItemNotFoundExcepion {
+        System.out.println("Updating user: " + usuarioDetails);
+        Usuario usuario = this.get(id);
+        usuario.setNome(usuarioDetails.getNome());
+        usuario.setUsername(usuarioDetails.getUsername());
+        usuario.setEmail(usuarioDetails.getEmail());
+        usuario.setCpf(usuarioDetails.getCpf());
+        usuario.setPermissoes(usuarioDetails.getPermissoes());
+
+        return usuarioRepository.save(usuario);
+    }
+
+
+    public boolean setPassword(Long id, String password) throws ItemNotFoundExcepion {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundExcepion(id, Usuario.class.getSimpleName()));
+        usuario.setPassword(Usuario.encode(password));
+        usuarioRepository.save(usuario);
+        return true;
+    }
+
+    public boolean resetPassword(Long id) throws ItemNotFoundExcepion {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundExcepion(id, Usuario.class.getSimpleName()));
+        usuario.setPassword(Usuario.encode(usuario.getUsername()));
+        usuarioRepository.save(usuario);
+        return true;
+    }
+
+    public void deleteById(Long id) throws ItemNotFoundExcepion {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundExcepion(id, Usuario.class.getSimpleName()));
         usuarioRepository.delete(usuario);
     }
 
-    public void delete(Long id) throws ItemNotFoundExcepion {
-        usuarioRepository.delete(this.get(id));
+    public List<PermissoesTipo> allPermissoesTipos() {
+        return PermissoesTipo.all();
     }
 
 }

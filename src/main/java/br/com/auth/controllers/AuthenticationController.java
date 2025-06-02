@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.auth.DTO.LoginDTO;
 import br.com.auth.DTO.LoginResponseDTO;
 import br.com.auth.model.Permissao;
+import br.com.auth.model.PermissoesTipo;
 import br.com.auth.model.Usuario;
 import br.com.auth.repositories.PermissaoRepository;
 import br.com.auth.repositories.UsuarioRepository;
@@ -59,8 +60,10 @@ public class AuthenticationController {
 
         
         List<Permissao> lista = new ArrayList<>();
-        Permissao perm = permissaoRepository.save(new Permissao(null, "BASIC"));
-        lista.add(perm);
+        Permissao basic = permissaoRepository.save(new Permissao(null, PermissoesTipo.BASIC));
+        Permissao admin = permissaoRepository.save(new Permissao(null, PermissoesTipo.ADMIN));
+        lista.add(basic);
+        lista.add(admin);
         usuario.setPermissoes(lista);
         usuarioRepository.save(usuario);
         return ResponseEntity.ok("primeiro acesso realizado com sucesso.");
