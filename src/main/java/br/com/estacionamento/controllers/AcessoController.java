@@ -35,6 +35,15 @@ public class AcessoController {
     public Acesso get(@PathVariable Long id) throws Throwable {
         return acessoService.get(id);
     }
+    @GetMapping("/{dia}/{mes}/{ano}")
+    public List<Acesso> getByDate(@PathVariable Integer dia,@PathVariable Integer mes,@PathVariable Integer ano) throws Throwable {
+        return acessoService.porDataEntrada(dia, mes, ano);
+    }
+    
+    @GetMapping("/e")
+    public List<Acesso> getSaidaIsNull() throws Throwable {
+        return acessoService.saidaIsNull();
+    }
 
     @PutMapping("/{id}")
     Acesso put(@RequestBody Acesso novo, @PathVariable Long id) {
