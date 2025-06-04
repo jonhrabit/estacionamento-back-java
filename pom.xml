@@ -11,9 +11,10 @@
 	</parent>
 	<groupId>br.jus</groupId>
 	<artifactId>estacionamento</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.9</version>
 	<name>Estacionamento</name>
 	<description>Cadastro, controle de autorizações e acesso ao estacionamento do FC1</description>
+
 	<url/>
 	<licenses>
 		<license/>
@@ -29,6 +30,7 @@
 	</scm>
 	<properties>
 		<java.version>22</java.version>
+    <maven.test.skip>true</maven.test.skip>
 	</properties>
 	<dependencies>
 
@@ -94,6 +96,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+                <classifier>exec</classifier>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -103,6 +106,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
 	</build>
 
 </project>

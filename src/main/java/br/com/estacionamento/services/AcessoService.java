@@ -4,13 +4,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import br.com.estacionamento.models.Veiculo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.auth.exceptions.ItemNotFoundExcepion;
 import br.com.estacionamento.models.Acesso;
+import br.com.estacionamento.models.Veiculo;
 import br.com.estacionamento.repositories.AcessoRepository;
 
 @Service
@@ -58,12 +58,8 @@ public class AcessoService {
         acessoOld.setSaida(new Date());
         return acessoRepository.save(acessoOld);
     }
-    public Acesso registrarEntradaById(Long id) throws ItemNotFoundExcepion {
-        Acesso acessoOld = this.get(id);
-        acessoOld.setEntrada(new Date());
-        return acessoRepository.save(acessoOld);
-    }
 
+    
     public Acesso registrarEntrada(Veiculo veiculo, String observacao) {
         Acesso acesso = new Acesso();
         acesso.setVeiculo(veiculo);

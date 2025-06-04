@@ -13,13 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.estacionamento.models.Acesso;
+import br.com.estacionamento.models.Veiculo;
 import br.com.estacionamento.services.AcessoService;
+import br.com.estacionamento.services.VeiculoService;
 
 @RestController
 @RequestMapping("/acessos/")
 public class AcessoController {
     @Autowired
     AcessoService acessoService;
+    @Autowired
+    VeiculoService veiculoService;
 
     @GetMapping
     public List<Acesso> all() {
@@ -40,7 +44,7 @@ public class AcessoController {
         return acessoService.porDataEntrada(dia, mes, ano);
     }
     
-    @GetMapping("/e")
+    @GetMapping("/saida")
     public List<Acesso> getSaidaIsNull() throws Throwable {
         return acessoService.saidaIsNull();
     }
@@ -48,6 +52,18 @@ public class AcessoController {
     @PutMapping("/{id}")
     Acesso put(@RequestBody Acesso novo, @PathVariable Long id) {
         return acessoService.update(novo, id);
+    }
+
+    @PostMapping("/entrada/{placa}")
+    Acesso put(@RequestBody String obs, @PathVariable String placa) throws Exception {
+        Veiculo veiculo = veiculoService.getByPlaca(placa);
+        return acessoService.registrarEntrada(veiculo,obs);
+    }
+
+    @PostMapping("/entradaporid/{id}")
+    Acesso put(@RequestBody String obs, @PathVariable Long id) throws Exception {
+        Veiculo veiculo = veiculoService.get(id);
+        return acessoService.registrarEntrada(veiculo,obs);
     }
 
     @DeleteMapping("/{id}")

@@ -46,4 +46,12 @@ public class VeiculoService {
         return veiculoRepository.findByPlacaContains(placa);
     }
 
+    public Veiculo getByPlaca(String placa) throws Exception {
+        List<Veiculo> veiculos = veiculoRepository.findByPlacaContains(placa);
+        if (veiculos.isEmpty()) {
+            throw new Exception("Veículo com placa " + placa + " não encontrado.");
+        }
+        return veiculos.get(0);
+    }
+
 }
