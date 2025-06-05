@@ -1,5 +1,6 @@
 package br.com.estacionamento.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,7 +17,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "acessos")
-public class Acesso {
+public class Acesso implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

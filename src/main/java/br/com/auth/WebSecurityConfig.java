@@ -38,7 +38,7 @@ public class WebSecurityConfig {
         private RSAPrivateKey priv;
 
         @Bean
-        CorsConfigurationSource corsConfigurationSource() {
+        public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
                 configuration.addAllowedOriginPattern("*"); // Permite todas as origens, ajuste conforme necessário
                 configuration.addAllowedMethod("*");
@@ -50,7 +50,7 @@ public class WebSecurityConfig {
         }
 
         @Bean
-        SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http.csrf(csrf -> csrf.disable())
                                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                                 .authorizeHttpRequests(
@@ -71,24 +71,24 @@ public class WebSecurityConfig {
         }
 
         @Bean
-        PasswordEncoder passwordEncoder() {
+        public PasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
         }
 
         @Bean
-        JwtDecoder jwtDecoder() {
+        public JwtDecoder jwtDecoder() {
                 return NimbusJwtDecoder.withPublicKey(this.key).build();
         }
 
         @Bean
-        JwtEncoder jwtEncoder() {
+        public JwtEncoder jwtEncoder() {
                 JWK jwk = new RSAKey.Builder(this.key).privateKey(this.priv).build();
                 JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
                 return new NimbusJwtEncoder(jwks);
         }
 
         @Bean
-        UserDetailsService userDetailsService() {
+        public UserDetailsService userDetailsService() {
                 return new UserDetailsServiceImp();
         }
 

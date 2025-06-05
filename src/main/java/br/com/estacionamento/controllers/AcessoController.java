@@ -50,20 +50,20 @@ public class AcessoController {
     }
 
     @PutMapping("/{id}")
-    Acesso put(@RequestBody Acesso novo, @PathVariable Long id) {
+    public Acesso put(@RequestBody Acesso novo, @PathVariable Long id) {
         return acessoService.update(novo, id);
     }
 
     @PostMapping("/entrada/{placa}")
-    Acesso put(@RequestBody String obs, @PathVariable String placa) throws Exception {
+    public Acesso entrada(@RequestBody ObsDTO obsDTO, @PathVariable String placa) throws Exception {
         Veiculo veiculo = veiculoService.getByPlaca(placa);
-        return acessoService.registrarEntrada(veiculo,obs);
+        return acessoService.registrarEntrada(veiculo, obsDTO.getObs());
     }
 
     @PostMapping("/entradaporid/{id}")
-    Acesso put(@RequestBody String obs, @PathVariable Long id) throws Exception {
+    public Acesso entradaporid(@RequestBody ObsDTO obsDTO, @PathVariable Long id) throws Exception {
         Veiculo veiculo = veiculoService.get(id);
-        return acessoService.registrarEntrada(veiculo,obs);
+        return acessoService.registrarEntrada(veiculo, obsDTO.getObs());
     }
 
     @DeleteMapping("/{id}")

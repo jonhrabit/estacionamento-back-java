@@ -1,5 +1,6 @@
 package br.com.estacionamento.models;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -15,7 +16,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "Pessoa")
-public class Pessoa {
+public class Pessoa implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
