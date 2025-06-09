@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Date;
 
+import br.com.estacionamento.DTO.CadastroDTO;
+import br.com.estacionamento.DTO.ObsDTO;
 import br.com.estacionamento.models.Acesso;
+import br.com.estacionamento.models.Pessoa;
 import br.com.estacionamento.models.Veiculo;
 import br.com.estacionamento.services.AcessoService;
+import br.com.estacionamento.services.PessoaService;
 import br.com.estacionamento.services.VeiculoService;
 
 @RestController
@@ -24,6 +29,8 @@ public class AcessoController {
     AcessoService acessoService;
     @Autowired
     VeiculoService veiculoService;
+    @Autowired
+    PessoaService pessoaService;
 
     @GetMapping
     public List<Acesso> all() {
@@ -49,7 +56,7 @@ public class AcessoController {
         return acessoService.saidaIsNull();
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public Acesso put(@RequestBody Acesso novo, @PathVariable Long id) {
         return acessoService.update(novo, id);
     }
@@ -65,6 +72,26 @@ public class AcessoController {
         Veiculo veiculo = veiculoService.get(id);
         return acessoService.registrarEntrada(veiculo, obsDTO.getObs());
     }
+
+    @PostMapping("/cadastro")
+    public Acesso cadastro(@RequestBody CadastroDTO cadastroDTO) {
+        Pessoa pessoa = new Pessoa(cadastroDTO);
+        pessoa = pessoaService.save(pessoa);
+        Veiculo veiculo = new Veiculo(cadastroDTO);
+        veiculo.setPessoa(pessoa);
+        veiculo = veiculoService.save(veiculo);
+        Acesso acesso = new Acesso();
+        acesso.setVeiculo(veiculo);
+        acesso.setEntrada(new Date());
+        acesso.setObservacao("Entrada registrada automaticamente pelo cadastro.");
+        return acessoService.save(acesso);
+    }
+
+    @PutMapping("/saida/{id}")
+    public Acesso saidaById(@PathVariable Long id) throws Exception {
+        return acessoService.registrarSaida(id);
+    }
+
 
     @DeleteMapping("/{id}")
     public boolean delete(@PathVariable Long id) {

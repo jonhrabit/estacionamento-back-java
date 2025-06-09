@@ -1,4 +1,4 @@
-package br.com.estacionamento.controllers;
+package br.com.estacionamento.DTO;
 
 public class ObsDTO {
     private String obs;

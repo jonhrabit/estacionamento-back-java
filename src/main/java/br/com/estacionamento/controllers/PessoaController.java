@@ -41,7 +41,7 @@ public class PessoaController {
     }
 
     @PutMapping("/{id}")
-    Pessoa put(@RequestBody Pessoa novo, @PathVariable Long id) {
+    public Pessoa put(@RequestBody Pessoa novo, @PathVariable Long id) {
         return pessoaService.update(novo, id);
     }
 
@@ -52,27 +52,27 @@ public class PessoaController {
     }
 
     @GetMapping("/search/cargo/{cargo}")
-    List<Pessoa> listByCargo(@PathVariable String cargo) {
+    public List<Pessoa> listByCargo(@PathVariable String cargo) {
         return pessoaService.findByCargo(cargo);
     }
 
     @GetMapping("/search/nome/{nome}")
-    List<Pessoa> listByNomeContains(@PathVariable String nome) {
+    public List<Pessoa> listByNomeContains(@PathVariable String nome) {
         return pessoaService.findByNomeContains(nome);
     }
 
     @GetMapping("/search/lotacao/{lotacao}")
-    List<Pessoa> listByLotacao(@PathVariable String lotacao) {
+    public List<Pessoa> listByLotacao(@PathVariable String lotacao) {
         return pessoaService.findByLotacao(lotacao);
     }
 
     @GetMapping("/search/tipo/{tipoVinculo}")
-    List<Pessoa> listByTipoVinculo(@PathVariable String tipoVinculo) {
+    public List<Pessoa> listByTipoVinculo(@PathVariable String tipoVinculo) {
         return pessoaService.findByTipoVinculo(tipoVinculo);
     }
 
     @GetMapping("/list/cargos")
-    List<Object> cargos() {
+    public List<Object> cargos() {
         return pessoaService.getCargos();
     }
 
