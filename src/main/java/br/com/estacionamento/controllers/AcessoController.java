@@ -1,8 +1,15 @@
 package br.com.estacionamento.controllers;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.Date;
 
 import br.com.estacionamento.DTO.CadastroDTO;
 import br.com.estacionamento.DTO.ObsDTO;
@@ -97,5 +103,36 @@ public class AcessoController {
     public boolean delete(@PathVariable Long id) {
         acessoService.delete(id);
         return true;
+    }
+    
+    @GetMapping("/exportar")
+    public List<Acesso> exportarAcessos() {
+        return acessoService.all();
+    }
+
+    @GetMapping("/exportar/csv")
+    public ResponseEntity<byte[]> exportarAcessosCsv() {
+        List<Acesso> acessos = acessoService.all();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8)) {
+            writer.write("id;placa;modelo;cor;entrada;saida;observacao\n");
+            for (Acesso acesso : acessos) {
+                String placa = acesso.getVeiculo() != null ? acesso.getVeiculo().getPlaca() : "";
+                String modelo = acesso.getVeiculo() != null ? acesso.getVeiculo().getModelo() : "";
+                String cor = acesso.getVeiculo() != null ? acesso.getVeiculo().getCor() : "";
+                String entrada = acesso.getEntrada() != null ? acesso.getEntrada().toString() : "";
+                String saida = acesso.getSaida() != null ? acesso.getSaida().toString() : "";
+                String observacao = acesso.getObservacao() != null ? acesso.getObservacao().replace(";", ",") : "";
+                writer.write(String.format("%d;%s;%s;%s;%s;%s;%s\n",
+                    acesso.getId(), placa, modelo, cor, entrada, saida, observacao));
+            }
+            writer.flush();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao exportar CSV", e);
+        }
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=acessos.csv")
+            .contentType(MediaType.parseMediaType("text/csv"))
+            .body(out.toByteArray());
     }
 }

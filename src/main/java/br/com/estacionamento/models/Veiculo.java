@@ -2,18 +2,23 @@ package br.com.estacionamento.models;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import br.com.estacionamento.DTO.CadastroDTO;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "veiculo")
 public class Veiculo implements Serializable {
@@ -32,6 +37,9 @@ public class Veiculo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "pessoa_id")
     private Pessoa pessoa;
+    
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Acesso> acessos;
 
     public Veiculo(CadastroDTO cadastroDTO) {
         this.id = cadastroDTO.idPessoa();

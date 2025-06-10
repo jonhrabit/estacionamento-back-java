@@ -1,6 +1,7 @@
 package br.com.estacionamento.DTO;
 
-public class ObsDTO {
+
+public class ObsDTO{
     private String obs;
 
     public String getObs() {

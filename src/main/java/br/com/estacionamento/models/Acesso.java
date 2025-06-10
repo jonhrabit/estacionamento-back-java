@@ -9,12 +9,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "acessos")
 public class Acesso implements Serializable{
@@ -23,6 +26,8 @@ public class Acesso implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+
+    @ManyToOne
     private Veiculo veiculo;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -34,4 +39,6 @@ public class Acesso implements Serializable{
     private Date saida;
 
     private String observacao;
+
+    
 }
