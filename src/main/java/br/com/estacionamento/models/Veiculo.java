@@ -42,7 +42,7 @@ public class Veiculo implements Serializable {
     private List<Acesso> acessos;
 
     public Veiculo(CadastroDTO cadastroDTO) {
-        this.id = cadastroDTO.idPessoa();
+        this.id = null;
         this.placa = cadastroDTO.placa();
         this.modelo = cadastroDTO.modelo();
         this.cor = cadastroDTO.cor();

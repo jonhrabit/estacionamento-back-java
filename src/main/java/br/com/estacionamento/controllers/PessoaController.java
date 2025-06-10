@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.estacionamento.DTO.ObsDTO;
 import br.com.estacionamento.models.Pessoa;
 import br.com.estacionamento.services.PessoaService;
 
@@ -27,12 +28,17 @@ public class PessoaController {
         return pessoaService.all();
     }
 
-    @PostMapping
-    public ResponseEntity<Object> post(@RequestBody List<Pessoa> pessoas) {
+    @PostMapping("/lista")
+    public ObsDTO post(@RequestBody List<Pessoa> pessoas) {
         pessoas.forEach(pessoa -> {
             pessoaService.save(pessoa);
         });
-        return ResponseEntity.ok("Lista importada com sucesso.");
+        return new ObsDTO("Lista importada com sucesso.");
+    }
+
+    @PostMapping
+    public Pessoa post(@RequestBody Pessoa pessoa) {
+        return pessoaService.save(pessoa);
     }
 
     @GetMapping("/{id}")

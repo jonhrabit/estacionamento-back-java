@@ -62,7 +62,7 @@ public class AcessoController {
         return acessoService.saidaIsNull();
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public Acesso put(@RequestBody Acesso novo, @PathVariable Long id) {
         return acessoService.update(novo, id);
     }
@@ -81,6 +81,7 @@ public class AcessoController {
 
     @PostMapping("/cadastro")
     public Acesso cadastro(@RequestBody CadastroDTO cadastroDTO) {
+
         Pessoa pessoa = new Pessoa(cadastroDTO);
         pessoa = pessoaService.save(pessoa);
         Veiculo veiculo = new Veiculo(cadastroDTO);
@@ -89,7 +90,7 @@ public class AcessoController {
         Acesso acesso = new Acesso();
         acesso.setVeiculo(veiculo);
         acesso.setEntrada(new Date());
-        acesso.setObservacao("Entrada registrada automaticamente pelo cadastro.");
+        acesso.setObservacao("Entrada registrada automaticamente no momento do cadastro.");
         return acessoService.save(acesso);
     }
 
