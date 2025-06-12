@@ -57,11 +57,10 @@ public class WebSecurityConfig {
 
                                                 auth -> auth.requestMatchers("/login").permitAll()
                                                                 .requestMatchers("/primeiroacesso").permitAll()
+                                                                .requestMatchers("/alterarsenha").authenticated()
                                                                 .requestMatchers("/usuarios/**")
                                                                 .hasAuthority("SCOPE_ADMIN")
                                                                 .anyRequest().authenticated()
-
-                                // auth -> auth.anyRequest().permitAll()
 
                                 )
                                 .oauth2ResourceServer(

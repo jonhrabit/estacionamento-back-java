@@ -37,8 +37,9 @@ public class UsuarioController {
     public Usuario get(@PathVariable Long id) throws ItemNotFoundExcepion {
         return usuarioService.get(id);
     }
+
     @GetMapping("/permissoes")
-    public List<PermissoesTipo> permissoes(){
+    public List<PermissoesTipo> permissoes() {
         return usuarioService.allPermissoesTipos();
     }
 
@@ -48,11 +49,6 @@ public class UsuarioController {
         return usuarioService.update(id, novo);
     }
 
-    @PutMapping("/alterarsenha/{id}")
-    boolean alterarSenha(@PathVariable Long id,@RequestBody String password) throws ItemNotFoundExcepion {
-        usuarioService.setPassword(id, password);
-        return true;
-    }
     @PutMapping("/resetsenha/{id}")
     boolean alterarSenha(@PathVariable Long id) throws ItemNotFoundExcepion {
         usuarioService.resetPassword(id);

@@ -10,14 +10,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.auth.DTO.AlterarSenhaDTO;
 import br.com.auth.DTO.LoginDTO;
 import br.com.auth.DTO.LoginResponseDTO;
+import br.com.auth.DTO.StringResponseDTO;
+import br.com.auth.exceptions.ItemNotFoundExcepion;
 import br.com.auth.model.Permissao;
 import br.com.auth.model.PermissoesTipo;
 import br.com.auth.model.Usuario;
@@ -46,19 +51,19 @@ public class AuthenticationController {
             return new ResponseEntity<>("Senha incorreta.", HttpStatus.UNAUTHORIZED);
 
         }
-        return new ResponseEntity<>(new LoginResponseDTO(authenticationService.authenticate(user.get())), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponseDTO(authenticationService.authenticate(user.get())),
+                HttpStatus.OK);
     }
 
- @RequestMapping("/primeiroacesso")
+    @RequestMapping("/primeiroacesso")
     public @ResponseBody ResponseEntity<Object> primeiroAcesso() {
         String senha = "adm";
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(senha);
-        
 
-        Usuario usuario = new Usuario(null,new Date(),"Administrador", "adm",encodedPassword,"","",new ArrayList<>());
+        Usuario usuario = new Usuario(null, new Date(), "Administrador", "adm", encodedPassword, "", "",
+                new ArrayList<>());
 
-        
         List<Permissao> lista = new ArrayList<>();
         Permissao basic = permissaoRepository.save(new Permissao(null, PermissoesTipo.BASIC));
         Permissao admin = permissaoRepository.save(new Permissao(null, PermissoesTipo.ADMIN));
@@ -68,5 +73,23 @@ public class AuthenticationController {
         usuarioRepository.save(usuario);
         return ResponseEntity.ok("primeiro acesso realizado com sucesso.");
     }
+
+    @PutMapping("/alterarsenha/{id}")
+    public StringResponseDTO alterarSenha(@PathVariable Long id, @RequestBody AlterarSenhaDTO alterarSenhaDTO)
+            throws ItemNotFoundExcepion {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundExcepion(id, "Usuário não encontrado com o ID: " + id));
+
+        if (usuario.matches(alterarSenhaDTO.senhaAtual())) {
+            usuario.setPassword(
+                    new BCryptPasswordEncoder().encode(alterarSenhaDTO.novaSenha()));
+            usuarioRepository.save(usuario);
+            return new StringResponseDTO("Senha alterada com sucesso.");
+
+        }
+        return new StringResponseDTO("Senha atual incorreta.");
+    }
+
+    //TODO: Implementar decoder de JWT para obter usuario logado
 
 }

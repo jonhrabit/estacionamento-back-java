@@ -80,26 +80,19 @@ public class Usuario implements UserDetails {
         return true;
     }
 
+    public String getOPassword() {
+        return this.password;
+    }
+
     public static String encode(String senha) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        System.out.println("Codificando senha: " + senha);
         return passwordEncoder.encode(senha);
     }
 
     public Boolean matches(String senha) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.matches(senha, this.password);
-    }
-
-    public Usuario fromDTO(Usuario usuario) {
-        this.setId(usuario.getId());
-        this.setNome(usuario.getNome());
-        this.setUsername(usuario.getUsername());
-        this.setPassword(encode(usuario.getPassword()));
-        this.setEmail(usuario.getEmail());
-        this.setCpf(usuario.getCpf());
-        this.setCadastro(new Date());
-        this.setPermissoes(usuario.getPermissoes());
-        return this;
+        return passwordEncoder.matches(senha, this.getOPassword());
     }
 
     /* public void obterIdPermissoes(PermissaoService service) {
