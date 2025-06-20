@@ -31,7 +31,12 @@ public class PessoaService {
     }
 
     public Pessoa save(Pessoa pessoa) {
-        return pessoaRepository.save(pessoa);
+        try {
+            Pessoa p = this.existPessoa(pessoa);
+            return p;
+        } catch (ItemNotFoundExcepion e) {
+            return pessoaRepository.save(pessoa);
+        }
     }
 
     public void delete(Pessoa pessoa) {
@@ -60,5 +65,14 @@ public class PessoaService {
 
     public List<Object> getCargos() {
         return pessoaRepository.getCargos();
+    }
+
+    public Pessoa existPessoa(Pessoa pessoa) throws ItemNotFoundExcepion {
+        Optional<Pessoa> p = pessoaRepository.findByNome(pessoa.getNome());
+        if (p.isPresent()) {
+            return p.get();
+        } else {
+            throw new ItemNotFoundExcepion(0L, "Pessoa não encontrada com o nome: " + pessoa.getNome());
+        }
     }
 }

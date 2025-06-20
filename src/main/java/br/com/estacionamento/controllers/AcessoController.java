@@ -81,9 +81,14 @@ public class AcessoController {
 
     @PostMapping("/cadastro")
     public Acesso cadastro(@RequestBody CadastroDTO cadastroDTO) {
-
-        Pessoa pessoa = new Pessoa(cadastroDTO);
-        pessoa = pessoaService.save(pessoa);
+        Pessoa pessoa = new Pessoa();
+        if(cadastroDTO.idPessoa()!=0){
+            pessoa = pessoaService.get(cadastroDTO.idPessoa());
+        }else{
+            pessoa = new Pessoa(cadastroDTO);
+            pessoa = pessoaService.save(pessoa);
+        }
+        
         Veiculo veiculo = new Veiculo(cadastroDTO);
         veiculo.setPessoa(pessoa);
         veiculo = veiculoService.save(veiculo);
@@ -92,6 +97,7 @@ public class AcessoController {
         acesso.setEntrada(new Date());
         acesso.setObservacao("Entrada registrada automaticamente no momento do cadastro.");
         return acessoService.save(acesso);
+        //return acesso;
     }
 
     @PutMapping("/saida/{id}")
