@@ -86,7 +86,6 @@ public class Usuario implements UserDetails {
 
     public static String encode(String senha) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        System.out.println("Codificando senha: " + senha);
         return passwordEncoder.encode(senha);
     }
 

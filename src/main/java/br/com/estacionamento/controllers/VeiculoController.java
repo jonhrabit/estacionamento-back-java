@@ -16,7 +16,7 @@ import br.com.estacionamento.models.Veiculo;
 import br.com.estacionamento.services.VeiculoService;
 
 @RestController
-@RequestMapping("/veiculos/")
+@RequestMapping("/api/veiculos/")
 public class VeiculoController {
     @Autowired
     VeiculoService veiculoService;

@@ -18,7 +18,7 @@ import br.com.auth.model.Usuario;
 import br.com.auth.services.UsuarioService;
 
 @RestController
-@RequestMapping("/usuarios/")
+@RequestMapping("/api/usuarios/")
 public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;

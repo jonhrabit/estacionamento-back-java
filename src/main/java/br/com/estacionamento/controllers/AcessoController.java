@@ -29,7 +29,7 @@ import br.com.estacionamento.services.PessoaService;
 import br.com.estacionamento.services.VeiculoService;
 
 @RestController
-@RequestMapping("/acessos/")
+@RequestMapping("/api/acessos/")
 public class AcessoController {
     @Autowired
     AcessoService acessoService;

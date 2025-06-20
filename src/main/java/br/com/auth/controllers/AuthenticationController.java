@@ -10,13 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import br.com.auth.DTO.AlterarSenhaDTO;
 import br.com.auth.DTO.LoginDTO;
@@ -30,7 +31,7 @@ import br.com.auth.repositories.PermissaoRepository;
 import br.com.auth.repositories.UsuarioRepository;
 import br.com.auth.services.AuthenticationService;
 
-@RestController
+@Controller
 public class AuthenticationController {
 
     @Autowired
@@ -40,7 +41,7 @@ public class AuthenticationController {
     @Autowired
     PermissaoRepository permissaoRepository;
 
-    @PostMapping("login")
+    @PostMapping("/api/login")
     public ResponseEntity<Object> Login(@RequestBody LoginDTO login) {
 
         Optional<Usuario> user = usuarioRepository.findByUsername(login.username());
@@ -55,7 +56,7 @@ public class AuthenticationController {
                 HttpStatus.OK);
     }
 
-    @RequestMapping("/primeiroacesso")
+    @RequestMapping("/api/primeiroacesso")
     public @ResponseBody ResponseEntity<Object> primeiroAcesso() {
         String senha = "adm";
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -74,7 +75,7 @@ public class AuthenticationController {
         return ResponseEntity.ok("primeiro acesso realizado com sucesso.");
     }
 
-    @PutMapping("/alterarsenha/{id}")
+    @PutMapping("/api/alterarsenha/{id}")
     public StringResponseDTO alterarSenha(@PathVariable Long id, @RequestBody AlterarSenhaDTO alterarSenhaDTO)
             throws ItemNotFoundExcepion {
         Usuario usuario = usuarioRepository.findById(id)
@@ -90,6 +91,16 @@ public class AuthenticationController {
         return new StringResponseDTO("Senha atual incorreta.");
     }
 
-    //TODO: Implementar decoder de JWT para obter usuario logado
+    @GetMapping("/api/olamundo")
+    public String home() {
+        return "olamundo.html";
+    }
+    @GetMapping("/")
+    public String index() {
+        System.out.println("Acessando a página inicial");
+        return "index.html";
+    }
+
+    // TODO: Implementar decoder de JWT para obter usuario logado
 
 }

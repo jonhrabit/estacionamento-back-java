@@ -17,7 +17,7 @@ import br.com.estacionamento.models.Pessoa;
 import br.com.estacionamento.services.PessoaService;
 
 @RestController
-@RequestMapping("/pessoas/")
+@RequestMapping("/api/pessoas/")
 public class PessoaController {
     @Autowired
     PessoaService pessoaService;
