@@ -45,7 +45,6 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     Usuario put(@RequestBody Usuario novo, @PathVariable Long id) {
-        System.out.println("Updating user: " + novo);
         return usuarioService.update(id, novo);
     }
 

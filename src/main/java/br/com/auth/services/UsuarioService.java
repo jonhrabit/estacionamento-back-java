@@ -51,7 +51,6 @@ public class UsuarioService {
     }
 
     public Usuario update(Long id, Usuario usuarioDetails) throws ItemNotFoundExcepion {
-        System.out.println("Updating user: " + usuarioDetails);
         Usuario usuario = this.get(id);
         usuario.setNome(usuarioDetails.getNome());
         usuario.setUsername(usuarioDetails.getUsername());

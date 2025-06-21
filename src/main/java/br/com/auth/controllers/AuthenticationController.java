@@ -98,7 +98,6 @@ public class AuthenticationController {
 
     @GetMapping("/")
     public String index() {
-        System.out.println("Acessando a página inicial");
         return "index.html";
     }
 
