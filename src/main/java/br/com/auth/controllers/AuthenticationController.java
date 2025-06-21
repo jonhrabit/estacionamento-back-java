@@ -95,12 +95,15 @@ public class AuthenticationController {
     public String home() {
         return "olamundo.html";
     }
+
     @GetMapping("/")
     public String index() {
         System.out.println("Acessando a página inicial");
         return "index.html";
     }
 
-    // TODO: Implementar decoder de JWT para obter usuario logado
-
+    @RequestMapping(value = { "/{path:[^\\.]*}" })
+    public String redirect() {
+        return "forward:/index.html";
+    }
 }
