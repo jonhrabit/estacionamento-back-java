@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.auth.DTO.AlterarSenhaDTO;
+import br.com.auth.DTO.StringResponseDTO;
 import br.com.auth.exceptions.ItemNotFoundExcepion;
 import br.com.auth.model.PermissoesTipo;
 import br.com.auth.model.Usuario;
@@ -52,6 +54,15 @@ public class UsuarioController {
     boolean alterarSenha(@PathVariable Long id) throws ItemNotFoundExcepion {
         usuarioService.resetPassword(id);
         return true;
+    }
+
+    @PutMapping("/alterarsenha/{id}")
+    public StringResponseDTO alterarSenha(@PathVariable Long id, @RequestBody AlterarSenhaDTO alterarSenhaDTO)
+            throws RuntimeException {
+
+        usuarioService.alterarPassword(id, alterarSenhaDTO.senhaAtual(), alterarSenhaDTO.novaSenha());
+
+        return new StringResponseDTO("Senha atual incorreta.");
     }
 
     @DeleteMapping("/{id}")

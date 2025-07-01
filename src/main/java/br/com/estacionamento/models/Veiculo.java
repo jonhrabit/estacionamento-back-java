@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import br.com.estacionamento.DTO.CadastroDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +18,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -31,13 +37,22 @@ public class Veiculo implements Serializable {
     private String modelo;
     private String cor;
     private String foto;
-    private boolean temporario;
+    private boolean ativo;
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(style = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "America/Sao_Paulo")
+
     private Date dataLimite;
+    @Temporal(TemporalType.TIME)
+    @DateTimeFormat(style = "HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "America/Sao_Paulo")
+    private Date horario;
+    private String observacao;
 
     @ManyToOne
     @JoinColumn(name = "pessoa_id")
     private Pessoa pessoa;
-    
+
     @OneToMany(fetch = FetchType.LAZY)
     private List<Acesso> acessos;
 
@@ -47,7 +62,9 @@ public class Veiculo implements Serializable {
         this.modelo = cadastroDTO.modelo();
         this.cor = cadastroDTO.cor();
         this.foto = cadastroDTO.foto();
-        this.temporario = cadastroDTO.temporario();
+        this.observacao = cadastroDTO.observacao();
+        this.ativo = cadastroDTO.ativo();
         this.dataLimite = cadastroDTO.dataLimite();
+        this.horario = cadastroDTO.horario();
     }
 }

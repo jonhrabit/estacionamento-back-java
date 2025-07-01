@@ -53,10 +53,13 @@ public class WebSecurityConfig {
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http.csrf(csrf -> csrf.disable())
                                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))                                
                                 .authorizeHttpRequests(
 
                                                 auth -> auth.requestMatchers("/login").permitAll()
                                                                 .requestMatchers("/assets/**").permitAll()
+                                                                .requestMatchers("/h2-console/**").permitAll()
                                                                 .requestMatchers("/**").permitAll()
                                                                 .requestMatchers("/primeiroacesso").permitAll()
                                                                 .requestMatchers("/alterarsenha").authenticated()

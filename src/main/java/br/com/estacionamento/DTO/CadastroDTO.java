@@ -18,6 +18,8 @@ public record CadastroDTO(
     String modelo,
     String cor,
     String foto,
-    boolean temporario,
-    Date dataLimite
+    String observacao,
+    boolean ativo,
+    Date dataLimite,
+    Date horario
 ) {}

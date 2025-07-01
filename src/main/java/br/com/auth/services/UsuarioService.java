@@ -3,6 +3,7 @@ package br.com.auth.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.auth.exceptions.ItemNotFoundExcepion;
@@ -61,12 +62,18 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-
-    public boolean setPassword(Long id, String password) throws ItemNotFoundExcepion {
+    public boolean alterarPassword(Long id, String password, String novoPassword) throws RuntimeException {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundExcepion(id, Usuario.class.getSimpleName()));
-        usuario.setPassword(Usuario.encode(password));
+
+        if (!usuario.matches(password)) {
+            throw new RuntimeException("Senha do usuário incorreta.");
+        }
+
+        usuario.setPassword(
+                new BCryptPasswordEncoder().encode(novoPassword));
         usuarioRepository.save(usuario);
+
         return true;
     }
 
